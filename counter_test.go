@@ -1,4 +1,4 @@
-package util
+package counter
 
 import "testing"
 
