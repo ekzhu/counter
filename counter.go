@@ -26,6 +26,12 @@ func (c *Counter) Update(elem interface{}) {
 	c.totalCount++
 }
 
+// Has checks whether the elem has been counted before.
+func (c *Counter) Has(elem interface{}) bool {
+	_, has := c.counter[elem]
+	return has
+}
+
 // Freqs returns a slice of elements and a slice
 // of corresponding integer frequencies.
 func (c *Counter) Freqs() ([]interface{}, []int) {
