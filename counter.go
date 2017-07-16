@@ -78,6 +78,28 @@ func (c *Counter) Apply(fn func(interface{}) error) error {
 	return nil
 }
 
+// Intersect return a counter of the intersection of two counter
+func (c *Counter) Intersect(d *Counter) *Counter {
+	i := NewCounter()
+	for elem, _ := range c.counter {
+		if d.Has(elem) {
+			i.counter[elem] = int(math.Min(float64(c.counter[elem]), float64(d.counter[elem])))
+		}
+	}
+	return i
+}
+
+// Difference returns a of the elements exclusively in c.
+func (c *Counter) Difference(d *Counter) *Counter {
+	m := NewCounter()
+	for elem, _ := range c.counter {
+		if !d.Has(elem) {
+			m.counter[elem] = c.counter[elem] - d.counter[elem]
+		}
+	}
+	return m
+}
+
 // Entropy computes the entropy of the collection counted.
 func (c *Counter) Entropy() float64 {
 	var e float64

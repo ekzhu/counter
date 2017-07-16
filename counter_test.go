@@ -100,3 +100,54 @@ func TestPairCounter(t *testing.T) {
 		t.Error("Sum of entropies must be greater or equal to joint entropy")
 	}
 }
+
+func TestBinaryOperator(t *testing.T) {
+	testData1 := []string{"a", "b", "b", "c", "d"}
+	testData2 := []string{"b", "b", "c", "c", "e"}
+	counter1 := NewCounter()
+	counter2 := NewCounter()
+	for i := range testData1 {
+		counter1.Update(testData1[i])
+		counter2.Update(testData2[i])
+	}
+	// intersection counter
+	intersectCounter := counter1.Intersect(counter2)
+	elems, freqs := intersectCounter.Freqs()
+	for i := range freqs {
+		if elems[i] == "a" && freqs[i] != 0 {
+			t.Fail()
+		}
+		if elems[i] == "b" && freqs[i] != 2 {
+			t.Fail()
+		}
+		if elems[i] == "c" && freqs[i] != 1 {
+			t.Fail()
+		}
+		if elems[i] == "d" && freqs[i] != 0 {
+			t.Fail()
+		}
+		if elems[i] == "e" && freqs[i] != 0 {
+			t.Fail()
+		}
+	}
+	// difference counter
+	differenceCounter := counter1.Difference(counter2)
+	elems, freqs = differenceCounter.Freqs()
+	for i := range freqs {
+		if elems[i] == "a" && freqs[i] != 1 {
+			t.Fail()
+		}
+		if elems[i] == "b" && freqs[i] != 0 {
+			t.Fail()
+		}
+		if elems[i] == "c" && freqs[i] != 0 {
+			t.Fail()
+		}
+		if elems[i] == "d" && freqs[i] != 1 {
+			t.Fail()
+		}
+		if differenceCounter.Has("e") {
+			t.Fail()
+		}
+	}
+}
