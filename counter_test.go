@@ -110,9 +110,29 @@ func TestBinaryOperator(t *testing.T) {
 		counter1.Update(testData1[i])
 		counter2.Update(testData2[i])
 	}
+	// union counter
+	unionCounter := counter1.Union(counter2)
+	elems, freqs := unionCounter.Freqs()
+	for i := range freqs {
+		if elems[i] == "a" && freqs[i] != 1 {
+			t.Fail()
+		}
+		if elems[i] == "b" && freqs[i] != 4 {
+			t.Fail()
+		}
+		if elems[i] == "c" && freqs[i] != 3 {
+			t.Fail()
+		}
+		if elems[i] == "d" && freqs[i] != 1 {
+			t.Fail()
+		}
+		if elems[i] == "e" && freqs[i] != 1 {
+			t.Fail()
+		}
+	}
 	// intersection counter
 	intersectCounter := counter1.Intersect(counter2)
-	elems, freqs := intersectCounter.Freqs()
+	elems, freqs = intersectCounter.Freqs()
 	for i := range freqs {
 		if elems[i] == "a" && freqs[i] != 0 {
 			t.Fail()
