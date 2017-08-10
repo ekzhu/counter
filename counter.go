@@ -32,6 +32,15 @@ func (c *Counter) Has(elem interface{}) bool {
 	return has
 }
 
+// Items returns the slice of unique items counted
+func (c *Counter) UniqueItems() []interface{} {
+	elems := make([]interface{}, 0, len(c.counter))
+	for elem := range c.counter {
+		elems = append(elems, elem)
+	}
+	return elems
+}
+
 // Freqs returns a slice of elements and a slice
 // of corresponding integer frequencies.
 func (c *Counter) Freqs() ([]interface{}, []int) {
@@ -42,6 +51,15 @@ func (c *Counter) Freqs() ([]interface{}, []int) {
 		counts = append(counts, count)
 	}
 	return elems, counts
+}
+
+// Copy returns a copy of the counter
+func (c *Counter) Copy() *Counter {
+	copy := NewCounter()
+	for elem, count := range c.counter {
+		copy.counter[elem] = count
+	}
+	return copy
 }
 
 // Probs returns a slice of elements and a slice
